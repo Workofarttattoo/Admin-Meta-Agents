@@ -1,0 +1,19 @@
+# Admin Meta-Agents Framework Requirements
+
+# Core dependencies
+# (Currently using only Python standard library)
+
+# Development dependencies (optional)
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+sphinx>=6.0.0
+
+# Future dependencies for advanced features
+# numpy>=1.24.0
+# pandas>=2.0.0
+# pydantic>=2.0.0
+# fastapi>=0.100.0
+# uvicorn>=0.23.0
