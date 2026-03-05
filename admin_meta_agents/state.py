@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections import deque
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Deque, Dict, List
 
 
 @dataclass
@@ -24,7 +25,7 @@ class AdminOpsState:
     active_agents: int = 0
     """How many agents are currently live in the system."""
 
-    pending_tasks: List[str] = field(default_factory=list)
+    pending_tasks: Deque[str] = field(default_factory=deque)
     """Tasks that still need to be assigned to an agent."""
 
     performance_metrics: Dict[str, float] = field(default_factory=dict)
@@ -32,6 +33,11 @@ class AdminOpsState:
 
     incidents: List[str] = field(default_factory=list)
     """Incident log describing exceptional events raised during a workflow."""
+
+    def __post_init__(self) -> None:
+        """Ensure collections are of the correct type."""
+        if not isinstance(self.pending_tasks, deque):
+            self.pending_tasks = deque(self.pending_tasks)
 
     def log_incident(self, message: str) -> None:
         """Append an incident description to the log."""
@@ -46,7 +52,9 @@ class AdminOpsState:
     def assign_task(self, task: str) -> None:
         """Move a task from the pending queue into active work."""
 
-        if task in self.pending_tasks:
+        if self.pending_tasks and self.pending_tasks[0] == task:
+            self.pending_tasks.popleft()
+        elif task in self.pending_tasks:
             self.pending_tasks.remove(task)
 
     def add_task(self, task: str) -> None:
