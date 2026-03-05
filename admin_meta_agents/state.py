@@ -57,6 +57,8 @@ class AdminOpsState:
     def spin_up_agent(self, resources_required: int = 1) -> None:
         """Provision a new agent if enough resources exist."""
 
+        if resources_required < 0:
+            raise ValueError("Resources required must be non-negative")
         if resources_required > self.available_resources:
             raise ValueError("Insufficient resources to spin up agent")
         self.available_resources -= resources_required
@@ -66,6 +68,8 @@ class AdminOpsState:
     def spin_down_agent(self, resources_reclaimed: int = 1) -> None:
         """Decommission an agent and free its resources."""
 
+        if resources_reclaimed < 0:
+            raise ValueError("Resources reclaimed must be non-negative")
         if self.active_agents == 0:
             raise ValueError("No active agents to spin down")
         self.active_agents -= 1

@@ -46,6 +46,8 @@ def _resource_tools() -> Dict[str, callable]:
     def allocate_resources(state: AdminOpsState, units: int = 1) -> str:
         """Allocate resources for incoming workloads."""
 
+        if units < 0:
+            raise ValueError("Units must be non-negative")
         if units > state.available_resources:
             state.log_incident("Allocation request exceeds availability")
             raise ValueError("Not enough resources available")
@@ -56,6 +58,8 @@ def _resource_tools() -> Dict[str, callable]:
     def deallocate_resources(state: AdminOpsState, units: int = 1) -> str:
         """Return unused resources to the pool."""
 
+        if units < 0:
+            raise ValueError("Units must be non-negative")
         state.available_resources += units
         state.allocated_resources = max(0, state.allocated_resources - units)
         return f"Deallocated {units} unit(s)"
@@ -81,6 +85,8 @@ def _scheduler_tools() -> Dict[str, callable]:
     def assign_tasks(state: AdminOpsState, count: int = 1) -> str:
         """Assign tasks to active agents."""
 
+        if count < 0:
+            raise ValueError("Count must be non-negative")
         assigned = 0
         while state.pending_tasks and assigned < count:
             task = state.pending_tasks[0]
@@ -145,12 +151,16 @@ def _lifecycle_tools() -> Dict[str, callable]:
     def spin_up_agent(state: AdminOpsState, resources_required: int = 1) -> str:
         """Provision a new agent instance."""
 
+        if resources_required < 0:
+            raise ValueError("Resources required must be non-negative")
         state.spin_up_agent(resources_required)
         return f"Agent spun up using {resources_required} resource unit(s)"
 
     def spin_down_agent(state: AdminOpsState, resources_reclaimed: int = 1) -> str:
         """Decommission an existing agent instance."""
 
+        if resources_reclaimed < 0:
+            raise ValueError("Resources reclaimed must be non-negative")
         state.spin_down_agent(resources_reclaimed)
         return f"Agent spun down, reclaimed {resources_reclaimed} unit(s)"
 
