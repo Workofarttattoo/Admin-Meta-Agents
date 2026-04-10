@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from admin_meta_agents.agents import MetaAgent, Tool, ToolExecutionResult
+from admin_meta_agents.agents import MetaAgent, Tool, ToolExecutionResult, build_tools
 from admin_meta_agents.state import AdminOpsState
 
 
@@ -35,3 +35,43 @@ def test_meta_agent_prevents_duplicate_tools() -> None:
     agent.register_tool(tool)
     with pytest.raises(ValueError):
         agent.register_tool(tool)
+
+
+def test_build_tools_with_docstrings() -> None:
+    def handler_one(state: AdminOpsState) -> str:
+        """First tool description."""
+        return "one"
+
+    def handler_two(state: AdminOpsState) -> str:
+        """Second tool description."""
+        return "two"
+
+    tool_map = {"one": handler_one, "two": handler_two}
+    tools = list(build_tools(tool_map))
+
+    assert len(tools) == 2
+    assert tools[0].name == "one"
+    assert tools[0].description == "First tool description."
+    assert tools[0].handler == handler_one
+
+    assert tools[1].name == "two"
+    assert tools[1].description == "Second tool description."
+    assert tools[1].handler == handler_two
+
+
+def test_build_tools_without_docstrings() -> None:
+    def handler_no_doc(state: AdminOpsState) -> str:
+        return "no doc"
+
+    tool_map = {"no_doc": handler_no_doc}
+    tools = list(build_tools(tool_map))
+
+    assert len(tools) == 1
+    assert tools[0].name == "no_doc"
+    assert tools[0].description == "Handler for no_doc"
+    assert tools[0].handler == handler_no_doc
+
+
+def test_build_tools_empty_map() -> None:
+    tools = list(build_tools({}))
+    assert len(tools) == 0
