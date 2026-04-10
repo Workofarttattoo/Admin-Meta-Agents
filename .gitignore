@@ -1,2 +1,42 @@
+# ── Python ───────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# ── Virtual environments ─────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env
+
+# ── Testing / Quality ───────────────────────────────────────────────
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# ── IDE ──────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── OS ───────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Docker ───────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Data / Logs ──────────────────────────────────────────────────────
+*.log
+data/
