@@ -53,13 +53,6 @@ def _resource_tools() -> Dict[str, callable]:
         state.allocated_resources += units
         return f"Allocated {units} unit(s)"
 
-    def deallocate_resources(state: AdminOpsState, units: int = 1) -> str:
-        """Return unused resources to the pool."""
-
-        state.available_resources += units
-        state.allocated_resources = max(0, state.allocated_resources - units)
-        return f"Deallocated {units} unit(s)"
-
     def usage_report(state: AdminOpsState) -> str:
         """Produce a human-readable usage report."""
 
@@ -72,7 +65,6 @@ def _resource_tools() -> Dict[str, callable]:
 
     return {
         "allocate_resources": allocate_resources,
-        "deallocate_resources": deallocate_resources,
         "usage_report": usage_report,
     }
 
