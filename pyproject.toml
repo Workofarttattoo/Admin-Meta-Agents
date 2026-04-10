@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "admin-meta-agents"
+version = "1.0.0"
+description = "An orchestration framework for coordinating administrative meta-agents with tool-based workflows."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "JoshuaHCole"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4",
+    "mypy>=1.0",
+]
+
+[project.scripts]
+admin-meta-agents = "admin_meta_agents.examples:run_default_workflow"
+
+[tool.setuptools.packages.find]
+include = ["admin_meta_agents*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true

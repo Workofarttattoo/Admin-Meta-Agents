@@ -1,0 +1,28 @@
+services:
+  admin-meta-agents:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: admin-meta-agents
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - app-data:/app/data
+    networks:
+      - agent-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+
+volumes:
+  app-data:
+
+networks:
+  agent-net:
+    driver: bridge
